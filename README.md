@@ -5,9 +5,6 @@ With this package a JSON string can be converted to a TypeScript interface defin
 ## Usage
 
 ```typescript
-const result: Node = parse(json, 'root');
-const structures: StructureResult = structure(result);
-const output: string = compile(structures.structures);
-
+json2ts(json, 'root');
 ```
  
