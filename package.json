@@ -2,7 +2,7 @@
   "name": "json-to-interface",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main.ts",
+  "main": "src/json2ts.ts",
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server",
@@ -45,5 +45,8 @@
     "typescript": "^2.7.1",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1"
+  },
+  "dependencies": {
+    "http-server": "^0.11.1"
   }
 }
