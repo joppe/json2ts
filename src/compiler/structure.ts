@@ -166,10 +166,14 @@ export function arrayProperty(node: Node): PropertyResult {
         const result: PropertyResult = property(child);
 
         if (result.id !== undefined) {
+            // Merge the structure of the property with the structures of its sibling properties
             structures = mergeStructures(result.structures[result.id], structures);
-        } else {
-            structures = {...structures, ...result.structures};
+
+            delete result.structures[result.id];
         }
+
+        // Merge all grandchild property structures
+        structures = {...structures, ...result.structures};
 
         if (result.property.isArray) {
             type = mergeArrays(type, [result.property.type]);
