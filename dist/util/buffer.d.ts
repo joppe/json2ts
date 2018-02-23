@@ -4,4 +4,4 @@ export interface IBuffer {
     append(str: string): void;
     flush(): string;
 }
-export declare function buffer(): IBuffer;
+export declare function createBuffer(): IBuffer;

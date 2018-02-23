@@ -26,7 +26,7 @@ export declare type PropertyResult = {
         [id: string]: Structure;
     };
 };
-export declare function getType(type: NodeType): string;
+export declare function nodeTypeToTypeScriptType(type: NodeType): string;
 export declare function mergeProperties(a: Structure, b: Structure): Structure;
 export declare function mergeStructures(add: Structure, collection: {
     [id: string]: Structure;
