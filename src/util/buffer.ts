@@ -1,5 +1,6 @@
 /**
  * Buffer text.
+ * Has methods to add new line and tab character.
  */
 
 // tslint:disable-next-line quotemark
@@ -15,7 +16,7 @@ export interface IBuffer {
     flush(): string;
 }
 
-export function buffer(): IBuffer {
+export function createBuffer(): IBuffer {
     let text: string[] = [];
 
     return {

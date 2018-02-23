@@ -1,5 +1,5 @@
 import { IPropertyTypeArray, Property, Structure } from 'app/compiler/structure';
-import { buffer as createBuffer, IBuffer } from 'app/util/buffer';
+import { createBuffer , IBuffer } from 'app/util/buffer';
 import { getType } from 'app/util/type';
 
 /**
