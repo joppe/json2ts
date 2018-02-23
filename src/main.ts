@@ -10,7 +10,8 @@ const output: HTMLElement = window.document.querySelector('.js-output');
 
 trigger.addEventListener('click', (): void => {
     try {
-        output.innerText = json2ts(input.value, 'root');
+        // tslint:disable-next-line no-inner-html
+        output.innerHTML = json2ts(input.value, 'root');
     } catch (e) {
         output.innerText = e.toString();
     }

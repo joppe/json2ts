@@ -41,14 +41,14 @@ export function compile(structures: { [id: string]: Structure }): string {
         const structure: Structure = structures[id];
 
         buffer.newLine();
-        buffer.append('interface ');
-        buffer.append(structure.name);
+        buffer.append('<span class="keyword">interface</span> ');
+        buffer.append(`<span class="interface-name">${structure.name}</span>`);
         buffer.append(' {');
 
         structure.properties.forEach((property: Property): void => {
             buffer.newLine();
             buffer.tab();
-            buffer.append(property.name);
+            buffer.append(`<span class="name">${property.name}</span>`);
 
             if (property.optional) {
                 buffer.append('?');
@@ -57,10 +57,11 @@ export function compile(structures: { [id: string]: Structure }): string {
             buffer.append(': ');
 
             if (property.isArray) {
-                buffer.append(arrayType(property.type));
+                buffer.append(`<span class="type">${arrayType(property.type)}</span>`);
             } else {
-                buffer.append(property.type.join(''));
+                buffer.append(`<span class="type">${property.type.join('')}</span>`);
             }
+
             buffer.append(';');
         });
 
