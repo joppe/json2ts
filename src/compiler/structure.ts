@@ -2,7 +2,7 @@ import { isPrimitive, Node, NodeType } from 'app/parser/node';
 import { merge as mergeArrays } from 'app/util/array';
 import { isEqualArray } from 'app/util/equal';
 import { ucfirst } from 'app/util/ucfirst';
-import { generator } from 'app/util/uuid';
+import { createGenerator } from 'app/util/uuid';
 
 /**
  * Create a structure (interface definition) from an AST.
@@ -36,9 +36,9 @@ export type PropertyResult = {
     structures: { [id: string]: Structure };
 };
 
-const uuid: () => string = generator();
+const uuidGenerator: () => string = createGenerator();
 
-export function getType(type: NodeType): string {
+export function nodeTypeToTypeScriptType(type: NodeType): string {
     if (type === NodeType.String) {
         return 'string';
     } else if (type === NodeType.Number) {
@@ -125,7 +125,7 @@ export function primitiveProperty(node: Node): PropertyResult {
         property: {
             name: node.name,
             type: [
-                getType(node.type)
+                nodeTypeToTypeScriptType(node.type)
             ],
             isArray: false,
             optional: false
@@ -213,7 +213,7 @@ export function structure(node: Node): StructureResult {
 
     let structures: { [id: string]: Structure } = {};
     const struct: Structure = {
-        id: uuid(),
+        id: uuidGenerator(),
         name: ucfirst(node.name),
         properties: []
     };

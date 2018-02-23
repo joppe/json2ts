@@ -27,7 +27,7 @@ type UUIDStore = {
  * The placeholder exists of characters that will be replaced in the generate function by a random hex value. The
  * character that will replaced is the `char` argument.
  */
-export function placeholder(parts: number[] = PARTS, char: string = CHAR, glue: string = GLUE): string {
+export function createPlaceholder(parts: number[] = PARTS, char: string = CHAR, glue: string = GLUE): string {
     return parts.map((count: number): string => {
         return repeat(char, count);
     }).join(glue);
@@ -35,7 +35,7 @@ export function placeholder(parts: number[] = PARTS, char: string = CHAR, glue: 
 
 /**
  * Generate an uuid.
- * Provide a blueprint where all occurrences of replace will be replaced by a random hex value.
+ * Provide a blueprint where all occurrences of "replace" will be replaced by a random hex value.
  */
 export function generate(blueprint: string, replace: string): string {
     return blueprint.split('').map((c: string): string => {
@@ -50,15 +50,15 @@ export function generate(blueprint: string, replace: string): string {
 /**
  * Create an uuid generator, that will generate unique uuids.
  */
-export function generator(parts: number[] = PARTS, char: string = CHAR, glue: string = GLUE): () => string {
-    const blueprint: string = placeholder(parts, char, glue);
+export function createGenerator(parts: number[] = PARTS, char: string = CHAR, glue: string = GLUE): () => string {
+    const placeholder: string = createPlaceholder(parts, char, glue);
     const store: UUIDStore = {};
 
     return (): string => {
-        let uuid: string = generate(blueprint, char);
+        let uuid: string = generate(placeholder, char);
 
         while (store[uuid] !== undefined) {
-            uuid = generate(blueprint, char);
+            uuid = generate(placeholder, char);
         }
 
         store[uuid] = true;

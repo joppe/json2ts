@@ -1,4 +1,4 @@
-import { generate, generator, placeholder } from 'app/util/uuid';
+import { createGenerator, createPlaceholder, generate } from 'app/util/uuid';
 
 /**
  * Generate unique uuids
@@ -7,7 +7,7 @@ import { generate, generator, placeholder } from 'app/util/uuid';
 describe('uuid', (): void => {
     describe('placeholder', (): void => {
         it('Generate a placeholder string with the default config', (): void => {
-            expect(placeholder()).toBe('........-....-....-....-............');
+            expect(createPlaceholder()).toBe('........-....-....-....-............');
         });
     });
 
@@ -20,13 +20,13 @@ describe('uuid', (): void => {
         });
     });
 
-    describe('generator', (): void => {
+    describe('createGenerator', (): void => {
         it('Should never generate the same UUID', (): void => {
             const store: { [id: string]: boolean } = {};
-            const uuids: () => string = generator();
+            const uuidGenerator: () => string = createGenerator();
 
             for (let i = 0; i < 50; i += 1) {
-                const uuid: string = uuids();
+                const uuid: string = uuidGenerator();
 
                 expect(store[uuid]).toBe(undefined);
                 store[uuid] = true;
