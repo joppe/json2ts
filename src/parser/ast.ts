@@ -6,12 +6,18 @@ import { IJSONArray, JSONValue } from 'app/util/json';
  * Create an AST tree from an object literal
  */
 
+/**
+ * Prevent that there are two (or more) children with exactly the same structure.
+ */
 function isAlreadyChild(newChild: Node, children: Node[]): boolean {
     return children.find((existingChild: Node): boolean => {
         return isEqual(newChild, existingChild);
     }) !== undefined;
 }
 
+/**
+ * Create a leaf node.
+ */
 function leaf(name: string, data: JSONValue): Node {
     const type: NodeType = getNodeType(data);
     const node: Node = createNode(name, type);
@@ -33,6 +39,9 @@ function leaf(name: string, data: JSONValue): Node {
     return node;
 }
 
+/**
+ * Create an Abstract Syntax Tree from a given json.
+ */
 export function ast(data: JSONValue, rootName: string): Node {
     let root: Node;
     const rootType: NodeType = getNodeType(data);
@@ -41,7 +50,7 @@ export function ast(data: JSONValue, rootName: string): Node {
         root = leaf(rootName, data);
     } else {
         root = createNode(rootName, NodeType.Object);
-        root.children.push(leaf('', data));
+        root.children.push(leaf(`${rootName}Child`, data));
     }
 
     return root;
