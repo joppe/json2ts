@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "paths": {
+      "@apestaartje/json2ts/*": [
+        "../src/json2ts/*"
+      ]
+    },
+    "removeComments": true,
+    "sourceMap": true,
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "target": "es6"
+  }
+}

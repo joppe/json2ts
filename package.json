@@ -1,15 +1,15 @@
 {
-  "name": "json-to-interface",
+  "name": "@apestaartje/json2ts",
   "version": "1.0.0",
   "description": "",
   "main": "src/json2ts.ts",
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack-dev-server",
+    "build": "npm run clean && node ./node_modules/.bin/tsc",
+    "dev": "webpack-dev-server --port 1234 --content-base public/",
     "lint": "tslint --config ./tslint.json --project tsconfig.json",
-    "setup": "node ./script/directory-structure.js",
-    "test": "karma start karma.conf.js",
-    "test:watch": "karma start karma.conf.js --no-single-run --auto-watch"
+    "test": "jest --coverage",
+    "test:debug": "node --inspect-brk ./node_modules/.bin/jest --watch --runInBand",
+    "test:watch": "jest --watch"
   },
   "author": {
     "name": "Joppe Aarts",
@@ -24,29 +24,28 @@
     "Webpack"
   ],
   "devDependencies": {
-    "@types/jasmine": "^2.8.6",
-    "autoprefixer": "^7.2.5",
-    "awesome-typescript-loader": "^3.4.1",
-    "bootstrap": "^4.0.0",
-    "css-loader": "^0.28.9",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "jasmine-core": "^2.99.0",
-    "karma": "^3.1.1",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-jasmine": "^1.1.1",
-    "karma-typescript": "^3.0.13",
-    "node-sass": "^4.7.2",
-    "postcss-loader": "^2.1.0",
-    "sass-loader": "^6.0.6",
-    "source-map-loader": "^0.2.3",
-    "style-loader": "^0.20.1",
-    "tslint": "^5.9.1",
-    "tslint-microsoft-contrib": "^5.0.2",
-    "typescript": "^2.7.1",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^3.1.10"
+    "@apestaartje/types": "^1.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.3",
+    "babel-jest": "^25.1.0",
+    "coveralls": "^3.0.11",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "ts-loader": "^6.2.2",
+    "tslint": "^6.1.0",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "http-server": "^0.11.1"
+    "@apestaartje/number": "^1.6.0",
+    "@apestaartje/string": "^2.4.0",
+    "@apestaartje/uuid": "^1.0.1"
   }
 }
