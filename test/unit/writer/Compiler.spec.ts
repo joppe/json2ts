@@ -5,7 +5,7 @@ import { Writer } from '@apestaartje/json2ts/writer/Writer';
 
 // tslint:disable max-func-body-length
 describe('Writer', (): void => {
-    describe('compiler', (): void => {
+    describe('compile', (): void => {
         it('return a string', (): void => {
             const ast: Node = {
                 name: 'Root',

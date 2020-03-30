@@ -1,6 +1,7 @@
 import { ucfirst } from '@apestaartje/string';
 
 import { getType } from '../util/type/getType';
+import { InterfaceDefinition } from './InterfaceDefinition';
 import { isEqualArray } from '../util/equal/isEqualArray';
 import { isPrimitiveType } from '../parser/ast/node/isPrimitiveType';
 import { merge } from '../util/array/merge';
@@ -8,11 +9,10 @@ import { Node } from '../parser/ast/node/Node';
 import { NodeType } from '../parser/ast/node/NodeType';
 import { nodeTypeToString } from '../parser/ast/node/nodeTypeToString';
 import { PropertyType } from './PropertyType';
-import { TSInterface } from './TSInterface';
-import { TSProperty } from './TSProperty';
+import { PropertyDefinition } from './PropertyDefinition';
 
-function cloneProperties(master: TSInterface): TSProperty[] {
-    return master.properties.map((property: TSProperty): TSProperty => {
+function cloneProperties(definition: InterfaceDefinition): PropertyDefinition[] {
+    return definition.properties.map((property: PropertyDefinition): PropertyDefinition => {
         return {
             ...property,
             isOptional: true,
@@ -20,21 +20,21 @@ function cloneProperties(master: TSInterface): TSProperty[] {
     });
 }
 
-function findProperty(searchProperty: TSProperty, properties: TSProperty[]): TSProperty | undefined {
-    return properties.find((prop: TSProperty): boolean => {
+function findProperty(searchProperty: PropertyDefinition, properties: PropertyDefinition[]): PropertyDefinition | undefined {
+    return properties.find((prop: PropertyDefinition): boolean => {
         return prop.name === searchProperty.name;
     });
 }
 
-function mergeProperties(master: TSInterface | undefined, slave: TSInterface): TSInterface {
+function mergeProperties(master: InterfaceDefinition | undefined, slave: InterfaceDefinition): InterfaceDefinition {
     if (master === undefined) {
         return slave;
     }
 
-    const properties: TSProperty[] = cloneProperties(master);
+    const properties: PropertyDefinition[] = cloneProperties(master);
 
-    slave.properties.forEach((property: TSProperty): void => {
-        const existingProperty: TSProperty | undefined = findProperty(property, properties);
+    slave.properties.forEach((property: PropertyDefinition): void => {
+        const existingProperty: PropertyDefinition | undefined = findProperty(property, properties);
 
         if (existingProperty === undefined) {
             properties.push({
@@ -57,7 +57,7 @@ function mergeProperties(master: TSInterface | undefined, slave: TSInterface): T
 }
 
 function normalizePropertyTypes(propertyTypes: PropertyType[]): PropertyType[] {
-    let object: TSInterface | undefined;
+    let definition: InterfaceDefinition | undefined;
     const primitives: PropertyType[] = [];
     const nested: PropertyType[] = [];
 
@@ -69,11 +69,11 @@ function normalizePropertyTypes(propertyTypes: PropertyType[]): PropertyType[] {
         } else if (type === 'String' && primitives.includes(propertyType) === false) {
             primitives.push(propertyType);
         } else if (type === 'Object') {
-            object = mergeProperties(object, <TSInterface>propertyType);
+            definition = mergeProperties(definition, <InterfaceDefinition>propertyType);
         }
     });
 
-    const result: PropertyType[] = object === undefined ? [] : [object];
+    const result: PropertyType[] = definition === undefined ? [] : [definition];
 
     return [
         ...primitives,
@@ -82,11 +82,11 @@ function normalizePropertyTypes(propertyTypes: PropertyType[]): PropertyType[] {
     ];
 }
 
-function createArrayProperty(node: Node): TSProperty {
+function createArrayProperty(node: Node): PropertyDefinition {
     const type: PropertyType[] = [];
 
     node.children.forEach((child: Node): void => {
-        const property: TSProperty = createProperty(child);
+        const property: PropertyDefinition = createProperty(child);
 
         if (child.type === NodeType.Array) {
             type.push(property.type);
@@ -103,8 +103,8 @@ function createArrayProperty(node: Node): TSProperty {
     };
 }
 
-function createObjectProperty(node: Node): TSProperty {
-    const nested: TSInterface = createInterface(node);
+function createObjectProperty(node: Node): PropertyDefinition {
+    const nested: InterfaceDefinition = createInterface(node);
 
     return {
         name: node.name,
@@ -116,7 +116,7 @@ function createObjectProperty(node: Node): TSProperty {
     };
 }
 
-function createPrimitiveProperty(node: Node): TSProperty {
+function createPrimitiveProperty(node: Node): PropertyDefinition {
     return {
         name: node.name,
         type: [
@@ -127,7 +127,7 @@ function createPrimitiveProperty(node: Node): TSProperty {
     };
 }
 
-function createProperty(node: Node): TSProperty {
+function createProperty(node: Node): PropertyDefinition {
     if (node.type === NodeType.Array) {
         return createArrayProperty(node);
     } else if (node.type === NodeType.Object) {
@@ -139,8 +139,8 @@ function createProperty(node: Node): TSProperty {
     throw new Error(`Unsupported node type ${node.type}`);
 }
 
-function createInterface(node: Node): TSInterface {
-    const properties: TSProperty[] = node.children.map((child: Node): TSProperty => {
+function createInterface(node: Node): InterfaceDefinition {
+    const properties: PropertyDefinition[] = node.children.map((child: Node): PropertyDefinition => {
         return createProperty(child);
     });
 
@@ -150,6 +150,6 @@ function createInterface(node: Node): TSInterface {
     };
 }
 
-export function compile(ast: Node): TSInterface {
+export function compile(ast: Node): InterfaceDefinition {
     return createInterface(ast);
 }

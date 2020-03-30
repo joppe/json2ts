@@ -1,5 +1,6 @@
 import { PropertyType } from './PropertyType';
-export declare type TSProperty = {
+
+export type PropertyDefinition = {
     name: string;
     type: PropertyType[];
     isArray: boolean;

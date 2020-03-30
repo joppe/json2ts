@@ -1,18 +1,18 @@
 import { getType } from '../util/type/getType';
 import { PropertyType } from '../compiler/PropertyType';
 import { StringBuffer } from '../compiler/StringBuffer';
-import { TSInterface } from '../compiler/TSInterface';
-import { TSProperty } from '../compiler/TSProperty';
+import { InterfaceDefinition } from '../compiler/InterfaceDefinition';
+import { PropertyDefinition } from '../compiler/PropertyDefinition';
 
 export class Writer {
-    private readonly _rootInterface: TSInterface;
+    private readonly _rootDefinition: InterfaceDefinition;
 
-    public constructor(rootInterface: TSInterface) {
-        this._rootInterface = rootInterface;
+    public constructor(rootDefinition: InterfaceDefinition) {
+        this._rootDefinition = rootDefinition;
     }
 
     public write(): string {
-        return this.object(this._rootInterface)
+        return this.object(this._rootDefinition)
             .toStringTree();
     }
 
@@ -32,8 +32,8 @@ export class Writer {
                 buffer.append(`<span class="type type--array">${nested.toString()}</span>`);
                 buffer.addChildren(nested.children);
             } else if (type === 'Object') {
-                buffer.append(`<span class="type type--object">${(<TSInterface>propertyType).name}</span>`);
-                buffer.addChild(this.object(<TSInterface>propertyType));
+                buffer.append(`<span class="type type--object">${(<InterfaceDefinition>propertyType).name}</span>`);
+                buffer.addChild(this.object(<InterfaceDefinition>propertyType));
             } else {
                 buffer.append(`<span class="type type--primitive">${<string>propertyType}</span>`);
             }
@@ -50,16 +50,16 @@ export class Writer {
         return buffer;
     }
 
-    private object(object: TSInterface): StringBuffer {
+    private object(definition: InterfaceDefinition): StringBuffer {
         const buffer: StringBuffer = new StringBuffer();
 
         buffer.newLine();
         buffer.append('<span class="keyword keyword--interface">interface</span>');
         buffer.space();
-        buffer.append(`<span class="name name--interface">${object.name}</span>`);
+        buffer.append(`<span class="name name--interface">${definition.name}</span>`);
         buffer.append(' {');
 
-        object.properties.forEach((property: TSProperty): void => {
+        definition.properties.forEach((property: PropertyDefinition): void => {
             buffer.newLine();
             buffer.tab();
             buffer.append(`<span class="name name--property">${property.name}</span>`);

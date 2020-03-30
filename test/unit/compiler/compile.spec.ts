@@ -1,10 +1,9 @@
+import { compile } from '@apestaartje/json2ts/compiler/compile';
+import { InterfaceDefinition } from '@apestaartje/json2ts/compiler/InterfaceDefinition';
 import { Node } from '@apestaartje/json2ts/parser/ast/node/Node';
 import { NodeType } from '@apestaartje/json2ts/parser/ast/node/NodeType';
-import { TSInterface } from '@apestaartje/json2ts/compiler/TSInterface';
-import { compile } from '@apestaartje/json2ts/compiler/compile';
 
 // tslint:disable max-func-body-length
-
 describe('compile', (): void => {
     it('handle simple object', (): void => {
         const input: Node = {
@@ -28,7 +27,7 @@ describe('compile', (): void => {
                 },
             ],
         };
-        const expected: TSInterface = {
+        const expected: InterfaceDefinition = {
             name: 'Root',
             properties: [
                 {
@@ -105,7 +104,7 @@ describe('compile', (): void => {
                 },
             ],
         };
-        const expected: TSInterface = {
+        const expected: InterfaceDefinition = {
             name: 'Root',
             properties: [
                 {
@@ -203,7 +202,7 @@ describe('compile', (): void => {
                 },
             ],
         };
-        const expected: TSInterface = {
+        const expected: InterfaceDefinition = {
             name: 'Root',
             properties: [
                 {
@@ -321,7 +320,7 @@ describe('compile', (): void => {
                 },
             ],
         };
-        const expected: TSInterface = {
+        const expected: InterfaceDefinition = {
             name: 'Root',
             properties: [
                 {
