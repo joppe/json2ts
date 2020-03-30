@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+    "lib": [
+      "ES2019"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "paths": {
+      "@apestaartje/json2ts/*": [
+        "../src/json2ts/*"
+      ]
+    },
+    "removeComments": true,
+    "sourceMap": true,
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "target": "es6"
+  }
+}

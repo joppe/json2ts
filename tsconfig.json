@@ -1,24 +1,25 @@
 {
-    "compilerOptions": {
-        "baseUrl": "./",
-        "declaration": true,
-        "experimentalDecorators": true,
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "outDir": "dist",
-        "paths": {
-            "app/*": [
-                "src/*"
-            ]
-        },
-        "removeComments": true,
-        "sourceMap": true,
-        "target": "es6"
-    },
-    "exclude": [
-        "dist"
+  "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "ES2019",
+      "dom"
     ],
-    "include": [
-        "src/**/*"
-    ]
+    "module": "es6",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "removeComments": true,
+    "sourceMap": true,
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "target": "es6"
+  },
+  "exclude": [
+    "dist"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ]
 }

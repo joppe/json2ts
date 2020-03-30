@@ -1,0 +1,1 @@
+{"version":3,"file":"isPrimitiveType.js","sourceRoot":"","sources":["../../../../src/json2ts/parser/node/isPrimitiveType.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAC;AAEtC,MAAM,UAAU,eAAe,CAAC,KAAe;IAC3C,OAAO,CACH,KAAK,KAAK,QAAQ,CAAC,OAAO;QAC1B,KAAK,KAAK,QAAQ,CAAC,MAAM;QACzB,KAAK,KAAK,QAAQ,CAAC,MAAM,CAC5B,CAAC;AACN,CAAC"}
