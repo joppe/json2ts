@@ -1,103 +1,36 @@
-import { ucfirst } from '@apestaartje/string';
+import { Json } from '@apestaartje/types';
 
-import { Node } from '../node/Node';
-import { IntermediateProperty } from './IntermediateProperty';
-import { NodeType } from '../node/NodeType';
-import { nodeTypeToString } from '../node/nodeTypeToString';
-import { isPrimitiveType } from '../node/isPrimitiveType';
-import { Structure } from './Structure';
-import { merge } from '../../util/array/merge';
+import { createName, flush } from './createName';
+import { createNode } from './node/createNode';
+import { getNodeType } from './node/getNodeType';
+import { isAlreadyChild } from './isAlreadyChild';
+import { Node } from './node/Node';
+import { NodeType } from './node/NodeType';
 
-function createPrimitiveProperty(node: Node): IntermediateProperty {
-    return {
-        name: node.name,
-        type: [
-            nodeTypeToString(node.type),
-        ],
-        isArray: false,
-        isOptional: false,
-        nested: [],
-    };
-}
+function ast(name: string, data: Json): Node {
+    const type: NodeType = getNodeType(data);
+    const node: Node = createNode(createName(name, type), type);
 
-function createObjectProperty(node: Node): IntermediateProperty {
-    const nested: Structure[] = createStructure(node);
+    if (type === NodeType.Object) {
+        Object.keys(<object>data)
+            .forEach((key: string): void => {
+                node.children.push(createAST(key, <Json>(<object>data)[key]));
+            });
+    } else if (type === NodeType.Array) {
+        (<Json[]>data).forEach((child: Json): void => {
+            const childNode: Node = createAST(name, child);
 
-    return {
-        name: node.name,
-        type: [
-            ucfirst(nested[0].name),
-        ],
-        isArray: false,
-        isOptional: false,
-        nested,
-    };
-}
-
-function mergeStructures(structure: Structure, structures: Structure): Structure[] {
-    return [];
-}
-
-function createArrayProperty(node: Node): IntermediateProperty {
-    const structures: Structure[] = [];
-    let type: string[] = [];
-
-    node.children.forEach((child: Node): void => {
-        const { nested, ...property } = createProperty(child);
-
-        console.log(node.name, JSON.stringify(nested));
-
-        /**
-         * Don't spread the nested, just add them. This way the nesting stays intact.
-         * With help of the nesting we can merge the structures.
-         *
-         * Somehow the information of different children must be kept alive.
-         */
-        structures.push(...nested);
-        type = merge(type, property.isArray ? [property.type] : property.type);
-    });
-
-    return {
-        name: node.name,
-        type,
-        isArray: true,
-        isOptional: false,
-        nested: structures,
-    };
-}
-
-function createProperty(child: Node): IntermediateProperty {
-    if (isPrimitiveType(child.type)) {
-        return createPrimitiveProperty(child);
-    } else if (child.type === NodeType.Object) {
-        return createObjectProperty(child);
-    } else if (child.type === NodeType.Array) {
-        return createArrayProperty(child);
+            if (!isAlreadyChild(childNode, node.children)) {
+                node.children.push(childNode);
+            }
+        });
     }
 
-    throw new Error(`Unsupported node type ${child.type}`);
+    return node;
 }
 
-function createStructure(node: Node): Structure[] {
-    const structures: Structure[] = [];
-    const structure: Structure = {
-        name: ucfirst(node.name),
-        properties: [],
-    };
+export function createAST(name: string, data: Json): Node {
+    flush();
 
-    node.children.forEach((child: Node): void => {
-        const { nested, ...property } = createProperty(child);
-
-        structure.properties.push(property);
-        structures.push(...nested);
-    });
-
-    return [
-        structure,
-        ...structures,
-    ];
-}
-
-export function createAST(parseTree: Node): Structure[] {
-    return createStructure(parseTree);
+    return ast(name, data);
 }

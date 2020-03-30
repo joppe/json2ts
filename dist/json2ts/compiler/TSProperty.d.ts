@@ -1,10 +1,7 @@
-import { Structure } from './Structure';
 import { PropertyType } from './PropertyType';
-
-export type IntermediateProperty = {
+export declare type TSProperty = {
     name: string;
     type: PropertyType[];
     isArray: boolean;
     isOptional: boolean;
-    nested: Structure[];
 };

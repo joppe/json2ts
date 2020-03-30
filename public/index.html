@@ -7,18 +7,20 @@
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col  py-3">
-                <button type="button" class="btn  btn-primary  js-trigger">Convert</button>
-            </div>
+        <div class="top">
+            <button type="button" class="button js-trigger">Convert</button>
         </div>
-        <div class="row">
-            <div class="col">
-                <textarea class="w-100  js-input" rows="30"></textarea>
-            </div>
-            <div class="col">
-                <pre class="interface js-output"></pre>
-            </div>
+
+        <div class="input">
+            <textarea class="js-input" rows="30"></textarea>
+        </div>
+
+        <div class="output">
+            <pre class="js-output"></pre>
+        </div>
+
+        <div class="status">
+            <p class="js-status"></p>
         </div>
     </div>
 

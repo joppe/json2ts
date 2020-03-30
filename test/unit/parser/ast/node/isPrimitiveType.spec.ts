@@ -1,5 +1,5 @@
-import { isPrimitiveType } from '@apestaartje/json2ts/parser/node/isPrimitiveType';
-import { NodeType } from '@apestaartje/json2ts/parser/node/NodeType';
+import { isPrimitiveType } from '@apestaartje/json2ts/parser/ast/node/isPrimitiveType';
+import { NodeType } from '@apestaartje/json2ts/parser/ast/node/NodeType';
 
 /**
  * Check generation of Node objects.

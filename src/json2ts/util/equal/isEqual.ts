@@ -1,4 +1,4 @@
-import { getType } from '../getType';
+import { getType } from '../type/getType';
 import { isEqualArray } from './isEqualArray';
 import { isEqualObject } from './isEqualObject';
 

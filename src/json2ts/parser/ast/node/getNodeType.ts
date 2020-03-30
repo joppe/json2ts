@@ -1,30 +1,23 @@
-import { getType } from '../../util/getType';
 import { Json } from '@apestaartje/types';
+
+import { getType } from '../../../util/type/getType';
 import { NodeType } from './NodeType';
 
 export function getNodeType(value: Json): NodeType {
     const type: string = getType(value);
-    let nodeType: NodeType;
 
     switch (type) {
         case 'Array':
-            nodeType = NodeType.Array;
-            break;
+            return NodeType.Array;
         case 'Boolean':
-            nodeType = NodeType.Boolean;
-            break;
+            return  NodeType.Boolean;
         case 'Number':
-            nodeType = NodeType.Number;
-            break;
+            return NodeType.Number;
         case 'Object':
-            nodeType = NodeType.Object;
-            break;
+            return NodeType.Object;
         case 'String':
-            nodeType = NodeType.String;
-            break;
+            return NodeType.String;
         default:
             throw new Error(`Unsupported type "${type}"`);
     }
-
-    return nodeType;
 }

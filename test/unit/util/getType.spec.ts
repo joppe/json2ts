@@ -1,4 +1,4 @@
-import { getType } from '@apestaartje/json2ts/util/getType';
+import { getType } from '@apestaartje/json2ts/util/type/getType';
 
 describe('getType', (): void => {
     it('string', (): void => {

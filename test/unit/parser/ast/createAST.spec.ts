@@ -1,15 +1,21 @@
 import { createAST } from '@apestaartje/json2ts/parser/ast/createAST';
-import { Node } from '@apestaartje/json2ts/parser/node/Node';
-import { NodeType } from '@apestaartje/json2ts/parser/node/NodeType';
-import { Structure } from '@apestaartje/json2ts/parser/ast/Structure';
+import { Node } from '@apestaartje/json2ts/parser/ast/node/Node';
+import { NodeType } from '@apestaartje/json2ts/parser/ast/node/NodeType';
+import { flush } from '@apestaartje/json2ts/parser/ast/createName';
 
-// tslint:disable max-func-body-length
+/**
+ * Check the generation of an Abstract Syntax Tree
+ */
 
-describe('createAST', (): void => {
-    /*
+describe('createParseTree', (): void => {
+    beforeEach((): void => {
+        flush();
+    });
+
     it('handle simple object', (): void => {
-        const input: Node = {
-            name: 'root',
+        const generated: Node = createAST('root', { foo: 'foo', bar: 12, isTrue: false });
+        const expected: Node = {
+            name: 'Root',
             type: NodeType.Object,
             children: [
                 {
@@ -29,165 +35,73 @@ describe('createAST', (): void => {
                 },
             ],
         };
-        const expected: Structure[] = [
-            {
-                name: 'Root',
-                properties: [
-                    {
-                        name: 'foo',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['string'],
-                    },
-                    {
-                        name: 'bar',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                    {
-                        name: 'isTrue',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['boolean'],
-                    },
-                ],
-            },
-        ];
 
-        expect(createAST(input)).toEqual(expected);
+        expect(generated).toEqual(expected);
     });
-    */
 
-    /*
-    it('handle nested object', (): void => {
-        const input: Node = {
+    it('handle number', (): void => {
+        const generated: Node = createAST('root', 1);
+        const expected: Node = {
             name: 'root',
-            type: NodeType.Object,
+            type: NodeType.Number,
+            children: [],
+        };
+
+        expect(generated).toEqual(expected);
+    });
+
+    it('handle string', (): void => {
+        const generated: Node = createAST('root', 'Hello world!');
+        const expected: Node = {
+            name: 'root',
+            type: NodeType.String,
+            children: [],
+        };
+
+        expect(generated).toEqual(expected);
+    });
+
+    it('handle boolean', (): void => {
+        const generated: Node = createAST('root', true);
+        const expected: Node = {
+            name: 'root',
+            type: NodeType.Boolean,
+            children: [],
+        };
+
+        expect(generated).toEqual(expected);
+    });
+
+    it('handle array', (): void => {
+        const generated: Node = createAST('root', [1, 3, 59]);
+        const expected: Node = {
+            name: 'root',
+            type: NodeType.Array,
             children: [
                 {
-                    name: 'foo',
-                    type: NodeType.Object,
-                    children: [
-                        {
-                            name: 'foobar',
-                            type: NodeType.Number,
-                            children: [],
-                        },
-                    ],
-                },
-                {
-                    name: 'meta',
-                    type: NodeType.Object,
-                    children: [
-                        {
-                            name: 'name',
-                            type: NodeType.String,
-                            children: [],
-                        },
-                        {
-                            name: 'position',
-                            type: NodeType.Object,
-                            children: [
-                                {
-                                    name: 'x',
-                                    type: NodeType.Number,
-                                    children: [],
-                                },
-                                {
-                                    name: 'y',
-                                    type: NodeType.Number,
-                                    children: [],
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    name: 'isTrue',
-                    type: NodeType.Boolean,
+                    name: 'root',
+                    type: NodeType.Number,
                     children: [],
                 },
             ],
         };
-        const expected: Structure[] = [
-            {
-                name: 'Root',
-                properties: [
-                    {
-                        name: 'foo',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['Foo'],
-                    },
-                    {
-                        name: 'meta',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['Meta'],
-                    },
-                    {
-                        name: 'isTrue',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['boolean'],
-                    },
-                ],
-            },
-            {
-                name: 'Foo',
-                properties: [
-                    {
-                        name: 'foobar',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                ],
-            },
-            {
-                name: 'Meta',
-                properties: [
-                    {
-                        name: 'name',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['string'],
-                    },
-                    {
-                        name: 'position',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['Position'],
-                    },
-                ],
-            },
-            {
-                name: 'Position',
-                properties: [
-                    {
-                        name: 'x',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                    {
-                        name: 'y',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                ],
-            },
-        ];
 
-        expect(createAST(input)).toEqual(expected);
+        expect(generated).toEqual(expected);
     });
-    */
 
-    it('handle nested array', (): void => {
-        const input: Node = {
-            name: 'root',
+    it('handle nested arrays', (): void => {
+        /**
+         *  Interface Root {
+         *      foo: (Foo | string | number)[][];
+         *  }
+         *
+         *  Interface Foo {
+         *      x: number;
+         *  }
+         */
+        const generated: Node = createAST('root', { foo: [ [ { id: 1 }, 'hello', 9, 10 ] ] });
+        const expected: Node = {
+            name: 'Root',
             type: NodeType.Object,
             children: [
                 {
@@ -195,157 +109,37 @@ describe('createAST', (): void => {
                     type: NodeType.Array,
                     children: [
                         {
-                            name: 'fooObject',
-                            type: NodeType.Object,
-                            children: [
-                                {
-                                    name: 'foobar1',
-                                    type: NodeType.Array,
-                                    children: [
-                                        {
-                                            name: 'foobar2',
-                                            type: NodeType.Array,
-                                            children: [
-                                                {
-                                                    name: 'quux',
-                                                    type: NodeType.Object,
-                                                    children: [
-                                                        {
-                                                            name: 'hello',
-                                                            type: NodeType.String,
-                                                            children: [],
-                                                        },
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                    ],
-                                },
-                            ],
-                        },
-                        {
-                            name: 'fooArray',
+                            name: 'foo',
                             type: NodeType.Array,
                             children: [
                                 {
-                                    name: 'fooArrayNumber1',
-                                    type: NodeType.Number,
-                                    children: [],
-                                },
-                                {
-                                    name: 'fooArrayNumber2',
-                                    type: NodeType.Number,
-                                    children: [],
-                                },
-                                {
-                                    name: 'fooArrayObject3',
+                                    name: 'Foo',
                                     type: NodeType.Object,
                                     children: [
                                         {
-                                            name: 'x',
-                                            type: NodeType.Number,
-                                            children: [],
-                                        },
-                                        {
-                                            name: 'y',
+                                            name: 'id',
                                             type: NodeType.Number,
                                             children: [],
                                         },
                                     ],
                                 },
                                 {
-                                    name: 'fooArrayObject',
-                                    type: NodeType.Object,
-                                    children: [
-                                        {
-                                            name: 'x',
-                                            type: NodeType.Number,
-                                            children: [],
-                                        },
-                                        {
-                                            name: 'y',
-                                            type: NodeType.Number,
-                                            children: [],
-                                        },
-                                        {
-                                            name: 'z',
-                                            type: NodeType.Number,
-                                            children: [],
-                                        },
-                                    ],
+                                    name: 'foo',
+                                    type: NodeType.String,
+                                    children: [],
+                                },
+                                {
+                                    name: 'foo',
+                                    type: NodeType.Number,
+                                    children: [],
                                 },
                             ],
                         },
                     ],
                 },
-                {
-                    name: 'bar',
-                    type: NodeType.Number,
-                    children: [],
-                },
-                {
-                    name: 'isTrue',
-                    type: NodeType.Boolean,
-                    children: [],
-                },
             ],
         };
-        const expected: Structure[] = [
-            {
-                name: 'Root',
-                properties: [
-                    {
-                        name: 'foo',
-                        isArray: true,
-                        isOptional: false,
-                        type: ['FooObject', ['number', 'FooArrayObject']],
-                    },
-                    {
-                        name: 'bar',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                    {
-                        name: 'isTrue',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['boolean'],
-                    },
-                ],
-            },
-            {
-                name: 'FooObject',
-                properties: [
-                    {
-                        name: 'foobar',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                ],
-            },
-            {
-                name: 'FooArrayObject',
-                properties: [
-                    {
-                        name: 'x',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                    {
-                        name: 'y',
-                        isArray: false,
-                        isOptional: false,
-                        type: ['number'],
-                    },
-                ],
-            },
-        ];
 
-        // console.log(JSON.stringify(createAST(input)));
-
-        expect(createAST(input).sort()).toEqual(expected.sort());
+        expect(generated).toEqual(expected);
     });
 });

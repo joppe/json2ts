@@ -1,14 +1,10 @@
 import { Json } from '@apestaartje/types';
 
-import { createParseTree } from './parse-tree/createParseTree';
-import { Node } from './node/Node';
-
-/**
- * Create a ParseTree from JSON
- */
+import { createAST } from './ast/createAST';
+import { Node } from './ast/node/Node';
 
 export function parse(json: string, rootName: string): Node {
     const data: Json = <Json>JSON.parse(json);
 
-    return createParseTree(rootName, data);
+    return createAST(rootName, data);
 }

@@ -1,11 +1,11 @@
-import { Node } from '@apestaartje/json2ts/parser/node/Node';
-import { NodeType } from '@apestaartje/json2ts/parser/node/NodeType';
+import { Node } from '@apestaartje/json2ts/parser/ast/node/Node';
+import { NodeType } from '@apestaartje/json2ts/parser/ast/node/NodeType';
 import { parse } from '@apestaartje/json2ts/parser/parse';
 
 describe('parse', (): void => {
     it('create a parse tree from a valid JSON', (): void => {
         const expected: Node = {
-            name: 'root',
+            name: 'Root',
             type: NodeType.Object,
             children: [
                 {

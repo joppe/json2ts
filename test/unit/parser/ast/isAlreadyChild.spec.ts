@@ -1,6 +1,6 @@
-import { isAlreadyChild } from '@apestaartje/json2ts/parser/parse-tree/isAlreadyChild';
-import { Node } from '@apestaartje/json2ts/parser/node/Node';
-import { NodeType } from '@apestaartje/json2ts/parser/node/NodeType';
+import { isAlreadyChild } from '@apestaartje/json2ts/parser/ast/isAlreadyChild';
+import { Node } from '@apestaartje/json2ts/parser/ast/node/Node';
+import { NodeType } from '@apestaartje/json2ts/parser/ast/node/NodeType';
 
 /**
  * Check the generation of an Abstract Syntax Tree

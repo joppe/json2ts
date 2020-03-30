@@ -1,5 +1,5 @@
-import { getNodeType } from '@apestaartje/json2ts/parser/node/getNodeType';
-import { NodeType } from '@apestaartje/json2ts/parser/node/NodeType';
+import { getNodeType } from '@apestaartje/json2ts/parser/ast/node/getNodeType';
+import { NodeType } from '@apestaartje/json2ts/parser/ast/node/NodeType';
 
 describe('getNodeType', (): void => {
     it('Should return a value from the enum NodeType', (): void => {
